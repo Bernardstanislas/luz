@@ -1,2 +1,2 @@
-# luz
+# Luz
 Garden lights control system
