@@ -1,9 +1,10 @@
 {
   "name": "luz",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Garden lights control system",
   "main": "index.js",
   "scripts": {
+    "build": "node ./node_modules/webpack/bin/webpack.js",
     "start": "mkdir build || true && touch build/server.js && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -38,6 +39,8 @@
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-stage-0": "^6.1.18",
+    "cron": "^1.0.9",
+    "lodash": "^3.10.1",
     "nodemon": "^1.8.1",
     "redux": "^3.0.4",
     "redux-logger": "^2.0.4",
