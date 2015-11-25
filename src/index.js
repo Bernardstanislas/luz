@@ -1,12 +1,26 @@
 import Firebase from 'firebase';
 import config from './config';
 import store from './store';
-import {logEvent} from './actions';
-
+import {updateTriggers, switchRelay} from './actions';
+import forEach from 'lodash/collection/forEach';
+import values from 'lodash/object/values';
 const firebaseRef = new Firebase(`https://${config.get('APP_NAME')}.firebaseio.com`);
 
-firebaseRef.on('value', snapshot => {
-    store.dispatch(logEvent(snapshot.val()));
+const timesheetsRef = firebaseRef.child('timesheets');
+const relaysRef = firebaseRef.child('relays');
+
+timesheetsRef.on('value', snapshot => {
+    const timesheets = snapshot.val();
+    forEach(timesheets, (timesheetsObject, relayId) => {
+        store.dispatch(updateTriggers(values(timesheetsObject), relayId));
+    });
+});
+
+relaysRef.on('value', snapshot => {
+    const relays = snapshot.val();
+    forEach(relays, ({manual, switched}, relayId) => {
+        if (manual) store.dispatch(switchRelay(relayId, switched, true));
+    });
 });
 
 console.log('Server has started :)');
