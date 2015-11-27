@@ -29,17 +29,15 @@ const triggers = (state = {}, action) => {
     }
 }
 
-const relays = (state = {}, action) => {
-    switch (action.type) {
+const relays = (state = {}, {type, relayId, switched}) => {
+    switch (type) {
         case SCHEDULED_SWITCH_RELAY:
-            const {relayId, switched} = action;
-            const newState = {...state, [relayId]: {switched}};
+            var newState = {...state, [relayId]: {switched}};
             relaysRef.set(newState);
             relaySwitcher(relayId, switched);
             return newState;
         case MANUAL_SWITCH_RELAY:
-            const {relayId, switched} = action;
-            const newState = {...state, [relayId]: {switched}};
+            var newState = {...state, [relayId]: {switched}};
             relaySwitcher(relayId, switched);
             return newState;
         default:

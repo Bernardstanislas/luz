@@ -6,8 +6,8 @@ const timeEntryToTrigger = ({h, md, d}, action) => new CronJob(`00 ${m} ${h} * *
 const buildSwitchActionDispatch = (relayId, switched) => store.dispatch(scheduledSwitchRelay(relayId, switched));
 
 const timesheetEntryToTriggers = ({from, to}, relayId) => [
-    timeEntryToTrigger(from, buildSwitchActionDispatch(relayId, true),
-    timeEntryToTrigger(to, buildSwitchActionDispatch(relayId, false),
+    timeEntryToTrigger(from, buildSwitchActionDispatch(relayId, true)),
+    timeEntryToTrigger(to, buildSwitchActionDispatch(relayId, false)),
 ];
 
 const filterActiveTimesheetEntries = ({active}) => active;
