@@ -1,26 +1,22 @@
 import {combineReducers} from 'redux';
-import {UPDATE_TRIGGERS, SWITCH_RELAY} from '../actions';
-import {switchRelay} from '../actions'
+import {UPDATE_TRIGGERS, SCHEDULED_SWITCH_RELAY, MANUAL_SWITCH_RELAY} from '../actions';
 import {CronJob} from 'cron';
 import Firebase from 'firebase';
 import config from '../config';
 import store from '../store';
 import {switchRelay as relaySwitcher} from '../relays';
+import {timesheetEntriesToTriggers} from '../timesheet'
 
 const relaysRef = new Firebase(`https://${config.get('APP_NAME')}.firebaseio.com`).child('relays');
 
+const stopTrigger = trigger => trigger.stop();
+const startTrigger = trigger => trigger.start();
+
 const updateSingleRelayTriggers = (triggers = [], timesheet, relayId) => {
-    triggers.map(trigger => trigger.stop());
-    const activeItems = timesheet.filter(({active}) => active);
-    return activeItems.reduce((triggers, {from, to}) => {
-        triggers.push(new CronJob(`00 ${from.m} ${from.h} * * ${from.d}`, () => {
-            store.dispatch(switchRelay(relayId, true));
-        }, null, true));
-        triggers.push(new CronJob(`00 ${to.m} ${to.h} * * ${to.d}`, () => {
-            store.dispatch(switchRelay(relayId, false));
-        }, null, true));
-        return triggers;
-    }, []);
+    triggers.map(stopTrigger);
+    const newTriggers = timesheetEntriesToTriggers(timesheet, relayId);
+    newTriggers.map(startTrigger);
+    return newTriggers;
 }
 
 const triggers = (state = {}, action) => {
@@ -35,10 +31,15 @@ const triggers = (state = {}, action) => {
 
 const relays = (state = {}, action) => {
     switch (action.type) {
-        case SWITCH_RELAY:
-            const {relayId, switched, manual} = action;
-            const newState = {...state, [relayId]: {switched, manual: false}};
-            if (!manual) relaysRef.set(newState);
+        case SCHEDULED_SWITCH_RELAY:
+            const {relayId, switched} = action;
+            const newState = {...state, [relayId]: {switched}};
+            relaysRef.set(newState);
+            relaySwitcher(relayId, switched);
+            return newState;
+        case MANUAL_SWITCH_RELAY:
+            const {relayId, switched} = action;
+            const newState = {...state, [relayId]: {switched}};
             relaySwitcher(relayId, switched);
             return newState;
         default:

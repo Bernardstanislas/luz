@@ -1,5 +1,6 @@
 export const UPDATE_TRIGGERS = 'UPDATE_TRIGGERS';
-export const SWITCH_RELAY = 'SWITCH_RELAY';
+export const SCHEDULED_SWITCH_RELAY = 'SCHEDULED_SWITCH_RELAY';
+export const MANUAL_SWITCH_RELAY = 'MANUAL_SWITCH_RELAY';
 
 export const updateTriggers = (timesheet, relayId) => {
     return ({
@@ -9,11 +10,18 @@ export const updateTriggers = (timesheet, relayId) => {
     });
 }
 
-export const switchRelay = (relayId, switched, manual = false) => {
+export const scheduledSwitchRelay = (relayId, switched) => {
     return ({
-        type: SWITCH_RELAY,
+        type: SCHEDULED_SWITCH_RELAY,
         relayId,
-        switched,
-        manual
+        switched
+    });
+}
+
+export const manualSwitchRelay = (relayId, switched) => {
+    return ({
+        type: MANUAL_SWITCH_RELAY,
+        relayId,
+        switched
     });
 }
