@@ -12,9 +12,6 @@ const createStoreWithMiddleware = compose(
 
 const store = createStoreWithMiddleware(app);
 
-
-const unsubscribe = store.subscribe(() => {
-    console.log('Store changed !');
-});
+const unsubscribe = store.subscribe(() => {});
 
 export default store;
