@@ -3,8 +3,8 @@ import os from 'os';
 
 const hostname = os.hostname();
 
-const gpio2 = gpio.export(2, {direction: 'out'});
-const gpio3 = gpio.export(3, {direction: 'out'});
+const gpio2 = gpio.export(2, {direction: 'out'}, () => {gpio2.set(1)});
+const gpio3 = gpio.export(3, {direction: 'out'}, () => {gpio3.set(1)});
 
 const switchGpio = (port, switched) => {
     if (hostname === 'raspberrypi') {
