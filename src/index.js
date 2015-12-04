@@ -21,7 +21,7 @@ relaysRef.on('value', snapshot => {
     });
 });
 
-relayRef.once('value', snapshot => {
+relaysRef.once('value', snapshot => {
     const relays = snapshot.val();
     forEach(relays, ({manual, switched}, relayId) => {
         if (manual) {
