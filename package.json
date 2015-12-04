@@ -31,7 +31,8 @@
   },
   "homepage": "https://github.com/Bernardstanislas/luz#readme",
   "dependencies": {
-    "firebase": "^2.3.2"
+    "firebase": "^2.3.2",
+    "gpio": "0.2.7"
   },
   "devDependencies": {
     "babel-cli": "^6.1.18",

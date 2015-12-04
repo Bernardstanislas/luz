@@ -36,7 +36,7 @@ const relays = (state = {}, {type, relayId, switched}) => {
             relaySwitcher(relayId, switched);
             return newState;
         case MANUAL_SWITCH_RELAY:
-            var newState = {...state, [relayId]: {switched}};
+            var newState = {...state, [relayId]: {switched}, manual: true};
             relaySwitcher(relayId, switched);
             return newState;
         default:
