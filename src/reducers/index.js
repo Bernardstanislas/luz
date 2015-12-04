@@ -1,13 +1,12 @@
 import {combineReducers} from 'redux';
 import {UPDATE_TRIGGERS, SCHEDULED_SWITCH_RELAY, MANUAL_SWITCH_RELAY} from '../actions';
 import {CronJob} from 'cron';
-import Firebase from 'firebase';
-import config from '../config';
+import firebase from '../firebase';
 import store from '../store';
 import {switchRelay as relaySwitcher} from '../relays';
 import {timesheetEntriesToTriggers} from '../timesheet'
 
-const relaysRef = new Firebase(`https://${config.get('APP_NAME')}.firebaseio.com`).child('relays');
+const relaysRef = firebase.child('relays');
 
 const stopTrigger = trigger => trigger.stop();
 const startTrigger = trigger => trigger.start();
@@ -33,7 +32,7 @@ const relays = (state = {}, {type, relayId, switched}) => {
     switch (type) {
         case SCHEDULED_SWITCH_RELAY:
             var newState = {...state, [relayId]: {switched}};
-            relaysRef.set(newState);
+            relaysRef.set({...state, [relayId]: {switched, manual: false}});
             relaySwitcher(relayId, switched);
             return newState;
         case MANUAL_SWITCH_RELAY:

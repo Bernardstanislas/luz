@@ -1,13 +1,11 @@
-import Firebase from 'firebase';
-import config from './config';
 import store from './store';
-import {updateTriggers, switchRelay} from './actions';
+import {updateTriggers, manualSwitchRelay} from './actions';
 import forEach from 'lodash/collection/forEach';
 import values from 'lodash/object/values';
-const firebaseRef = new Firebase(`https://${config.get('APP_NAME')}.firebaseio.com`);
+import firebase from './firebase';
 
-const timesheetsRef = firebaseRef.child('timesheets');
-const relaysRef = firebaseRef.child('relays');
+const timesheetsRef = firebase.child('timesheets');
+const relaysRef = firebase.child('relays');
 
 timesheetsRef.on('value', snapshot => {
     const timesheets = snapshot.val();
@@ -19,7 +17,7 @@ timesheetsRef.on('value', snapshot => {
 relaysRef.on('value', snapshot => {
     const relays = snapshot.val();
     forEach(relays, ({manual, switched}, relayId) => {
-        if (manual) store.dispatch(switchRelay(relayId, switched, true));
+        if (manual) store.dispatch(manualSwitchRelay(relayId, switched));
     });
 });
 
