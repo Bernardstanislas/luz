@@ -14,21 +14,17 @@ timesheetsRef.on('value', snapshot => {
     });
 });
 
+relaysRef.once('value', snapshot => {
+    const relays = snapshot.val();
+    forEach(relays, ({manual, switched}, relayId) => {
+        if (!manual) store.dispatch(scheduledSwitchRelay(relayId, switched));
+    });
+});
+
 relaysRef.on('value', snapshot => {
     const relays = snapshot.val();
     forEach(relays, ({manual, switched}, relayId) => {
         if (manual) store.dispatch(manualSwitchRelay(relayId, switched));
-    });
-});
-
-relaysRef.once('value', snapshot => {
-    const relays = snapshot.val();
-    forEach(relays, ({manual, switched}, relayId) => {
-        if (manual) {
-            store.dispatch(manualSwitchRelay(relayId, switched));
-        } else {
-            store.dispatch(scheduledSwitchRelay(relayId, switched));
-        }
     });
 });
 

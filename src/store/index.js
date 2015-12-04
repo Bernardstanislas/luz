@@ -6,7 +6,7 @@ const loggerMiddleware = createNodeLogger({});
 
 const createStoreWithMiddleware = compose(
     applyMiddleware(
-        loggerMiddleware
+        //loggerMiddleware
     )
 )(createStore);
 
