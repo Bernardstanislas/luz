@@ -11,4 +11,14 @@ firebaseRef.authWithPassword({
         console.log('Login Failed!', error);
     }
 });
+
+const amOnline = firebaseRef.child('.info').child('connected');
+const userRef = firebaseRef.child('base').child('presence');
+amOnline.on('value', snapshot => {
+  if (snapshot.val()) {
+    userRef.onDisconnect().set(Firebase.ServerValue.TIMESTAMP);
+    userRef.set(true);
+  }
+});
+
 export default firebaseRef;
