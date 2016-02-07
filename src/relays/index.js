@@ -20,8 +20,10 @@ const switchGpio = (port, switched, relay) => {
     } else {
         console.log(`Port ${port.headerNum} is now switched ${switched ? 'on' : 'off'}.`);
     }
-    relaysRef.child(relay).child('switched').set(switched);
-    relaysRef.child(relay).child('manual').set(false);
+    relaysRef.child(relay).set({
+        switched,
+        manual: false
+    });
 }
 
 export const switchRelay = (relayId, switched) => {

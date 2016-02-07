@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node ./node_modules/webpack/bin/webpack.js",
-    "start": "mkdir build || true && touch build/server.js && node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "mkdir build || true && touch build/server.js && node index.js"
   },
   "repository": {
     "type": "git",

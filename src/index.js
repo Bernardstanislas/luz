@@ -14,13 +14,14 @@ timesheetsRef.on('value', snapshot => {
     });
 });
 
-setTimeout(() => {
-    relaysRef.on('value', snapshot => {
-        const relays = snapshot.val();
-        forEach(relays, ({manual, switched}, relayId) => {
-            if (manual) store.dispatch(manualSwitchRelay(relayId, switched));
-        });
-    });
-}, 5000);
+relaysRef.child('relay1').on('value', snapshot => {
+    const {manual, switched} = snapshot.val();
+    if (manual) store.dispatch(manualSwitchRelay('relay1', switched));
+});
+
+relaysRef.child('relay2').on('value', snapshot => {
+    const {manual, switched} = snapshot.val();
+    if (manual) store.dispatch(manualSwitchRelay('relay2', switched));
+});
 
 console.log('Server has started :)');
